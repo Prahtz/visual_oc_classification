@@ -1,0 +1,3 @@
+[submodule "esvit"]
+	path = esvit
+	url = https://github.com/Prahtz/esvit
