@@ -1,5 +1,7 @@
 __pycache__
-data/*
+data/
 env/
-checkpoints/*
-features/*
+checkpoints/
+features/
+experiments/
+logs/

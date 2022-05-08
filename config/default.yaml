@@ -1,0 +1,26 @@
+DATASET:
+  NAME: cifar10
+EXTRACT:
+  BATCH_SIZE: 32
+FEATURE_EXTRACTOR:
+  NAME: esvit_swin_base
+  NUM_BLOCKS: 4
+SYSTEM:
+  FEATURES_PATH: features/
+  LOG_PATH: logs/
+  NUM_WORKERS: 0
+  PIN_MEMORY: true
+TRAIN:
+  COST_MODEL:
+  - fn: 1
+    fp: 0.1
+    tn: 0
+    tp: 0
+  ISOLATION_FOREST: false
+  LOF: false
+  METRIC: roc_auc
+  OCSVM: false
+  SGDOCSVM:
+    HYPERPARAMS:
+    - null
+  VERBOSE: 0

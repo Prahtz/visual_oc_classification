@@ -1,12 +1,14 @@
+from tabnanny import verbose
 import sklearn
 from sklearn.metrics import roc_auc_score
 from sklearn.utils import compute_sample_weight
 from sklearn.utils.extmath import stable_cumsum
 import numpy as np
 
-def avg_auc(classifiers, data):
+def avg_auc(classifiers, data, verbose=0):
     features, labels = data
     avg_auc = 0
+    scorings = {}
     for c in classifiers.keys():
         y_true = labels == c
         try:
@@ -14,13 +16,19 @@ def avg_auc(classifiers, data):
         except AttributeError:
             scoring = classifiers[c].score_samples(features)
         auc = roc_auc_score(y_true, scoring)
-        print('Class:', c, 'roc-auc: ', auc)
+        scorings[c] = auc
+        if verbose:
+            print('Class:', c, 'roc-auc: ', auc)
         avg_auc += auc
-    return avg_auc / len(classifiers.keys())
+    avg_auc /= len(classifiers.keys())
+    if verbose:
+        print('Average ROC-AUC:', avg_auc)
+    return avg_auc, scorings
 
-def avg_cs(classifiers, data, cost_model):
+def avg_cs(classifiers, data, cost_model, verbose=0):
     features, labels = data
     avg_cs = 0
+    scorings = {}
     for c in classifiers.keys():
         y_true = labels == c
         try:
@@ -28,9 +36,14 @@ def avg_cs(classifiers, data, cost_model):
         except AttributeError:
             scoring = classifiers[c].score_samples(features)
         cs = custom_scoring(y_true, scoring, cost_model)
-        print('Class:', c, 'custom score: ', cs)
+        scorings[c] = cs
+        if verbose:
+            print('Class:', c, 'custom score: ', cs)
         avg_cs += cs
-    return avg_cs / len(classifiers.keys())
+    avg_cs /= len(classifiers.keys())
+    if verbose:
+        print('Average ROC-AUC:', avg_cs)
+    return avg_cs, scorings
 
 def custom_scoring(y_true, y_score, cost_model, sample_weight=None):
     if sample_weight is not None:

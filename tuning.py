@@ -20,5 +20,6 @@ def multiclass_tuning(estimator, params, classes, data_train, data_val, verbose=
         y_val_c = data_val[1] == c
         normal_data_train = data_train[0][data_train[1] == c]
         best_params[c] = hyperparameter_tuning(estimator, params, normal_data_train, data_val[0], y_val_c, verbose=verbose, scoring=scoring)
-        print('Class id ',c ,': best parameters: ', best_params[c], sep='')
+        if verbose:
+            print('Class id ',c ,': best parameters: ', best_params[c], sep='')
     return best_params
